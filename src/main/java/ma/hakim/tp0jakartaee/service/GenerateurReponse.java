@@ -1,32 +1,33 @@
 package ma.hakim.tp0jakartaee.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Service qui génère la réponse à une question de l'utilisateur.
- * En attendant de l'envoyer à un LLM (prochains TPs), le traitement est simple :
- * la question est mise en minuscules, le rôle système est ajouté au début
- * de la première réponse, et le tout est entouré avec "||".
+ * Classe de service pour les modificateurs de question.
+ * Un modificateur de question prend en entrée une question et retourne
+ * la question modifiée.
  */
-@ApplicationScoped
-public class GenerateurReponse {
-
+@Dependent // Portée CDI pour rendre la classe injectable par CDI dans les autres classes.
+// Portée Dependent : l'instance sera supprimée quand la classe qui l'a injectée sera supprimée.
+public class GenerateurReponse implements Serializable { // Serializable car CDI peut mettre l'instance en mémoire secondaire.
     /**
-     * Génère la réponse à une question.
-     *
-     * @param question    la question posée par l'utilisateur.
-     * @param roleSysteme le rôle de l'API ; il n'est pas null seulement pour
-     *                    la première question de la conversation.
-     * @return la réponse générée.
+     * Génère une réponse à une question.
+     * @param question La question à modifier.
+     * @param roleSysteme Le rôle système à utiliser pour la modification de la question.
+     * @return La question modifiée : le rôle système en majuscule au début de la question, s'il n'est pas null,
+     * suivi d'un saut de ligne,
+     * puis la question en minuscule, le tout entouré de "||".
      */
     public String genererReponse(String question, String roleSysteme) {
-        StringBuilder reponse = new StringBuilder("||");
+        String resultat = "||";
         if (roleSysteme != null) {
-            reponse.append(roleSysteme.toUpperCase(Locale.FRENCH)).append("\n");
+            // Ajouter le rôle système en majuscule au début du résultat, suivi d'un saut de ligne.
+            resultat += roleSysteme.toUpperCase(Locale.FRENCH) + "\n";
         }
-        reponse.append(question.toLowerCase(Locale.FRENCH)).append("||");
-        return reponse.toString();
+        resultat += question.toLowerCase(Locale.FRENCH) + "||";
+        return resultat;
     }
 }
