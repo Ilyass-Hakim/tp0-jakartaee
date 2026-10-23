@@ -23,6 +23,13 @@
             <version>11.0.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Bibliothèque de composants PrimeFaces (version pour Jakarta EE) -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>14.0.2</version>
+            <classifier>jakarta</classifier>
+        </dependency>
     </dependencies>
 
     <build>
